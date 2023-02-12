@@ -52,7 +52,7 @@
 						{
 							"key": "files",
 							"type": "file",
-							"src": "/Users/luyaochen/PycharmProjects/faq-service/ece350_manual.pdf"
+							"src": "./ece350_manual.pdf"
 						}
 					]
 				},
