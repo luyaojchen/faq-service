@@ -31,7 +31,7 @@ def test_flow(client: FlaskClient):
     data = json.loads(resp.data.decode('utf-8'))
     knowledgebase_id = data['knowledgebase_id']
 
-    file_name = 'ece350_manual.pdf'
+    file_name = 'testing.txt'
     file_path = os.path.join(Path(os.path.dirname(__file__)), file_name)
     with open(file_path, 'rb') as input_file:
         input_file_stream = io.BytesIO(input_file.read())
@@ -47,14 +47,14 @@ def test_flow(client: FlaskClient):
         'knowledgebase_id': knowledgebase_id
     }
 
-    resp = client.get('/compose?knowledgebase_id='+knowledgebase_id)
-    data = json.loads(resp.data.decode('utf-8'))
-    print(data)
+    resp = client.get('/compose', query_string=data)
+
+    assert resp.status_code == 200
+
     test_payload = {
         'knowledgebase_id': knowledgebase_id,
-        'query': 'what is this document about?'
+        'query': 'The code word for this is:'
     }
-    # resp = client.get('/query', json=test_payload)
-    # data = json.loads(resp.data.decode('utf-8'))
-    # print(data)
-    # print(resp)
+    resp = client.get('/query', query_string=test_payload)
+    data = resp.data.decode('utf-8')
+    assert "test" in data

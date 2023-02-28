@@ -32,7 +32,7 @@ class Knowledgebase:
         for document in documents:
             self.documents.append(document)
     def build_index(self):
-        # Go through the documents and flatten them
+        #Go through the documents and flatten them
         flattened_documents = []
         for document in self.documents:
             if (isinstance(document, list)):
@@ -45,7 +45,9 @@ class Knowledgebase:
             documents=flattened_documents, llm_predictor=llm_predictor, prompt_helper=prompt_helper
         )
         self.index = index
-        return index
+
+        # Mock a GPTSimpleVectorIndex
+        return GPTSimpleVectorIndex(documents=[])
 
     # String repr is just the id
     def __repr__(self):
@@ -65,6 +67,9 @@ class Answer:
 
 def build_api_error(error_message):
     return flask.jsonify({"error": error_message})
+
+def build_compose_success_message():
+    return flask.jsonify({"message": "Successfully composed knowledgebase"})
 
 def build_answer_response(answer: Answer):
     return flask.jsonify({"answer_id": answer.answer_id, "answer_text": answer.answer_text})
@@ -112,18 +117,23 @@ def upload():
 def compose():
     # Extract the knowledgebase_id from the request
     knowledgebase_id = flask.request.args.get('knowledgebase_id')
+    print("1")
 
     # Validate the knowledgebase ID
     if not knowledgebase_id:
         return build_api_error("knowledgebase_id is required")
 
+    print("2")
+
     # Check if knowledgebase exists
     if knowledgebase_id not in g_index:
         return build_api_error("knowledgebase_id does not exist")
 
+    print('3')
+
     g_index[knowledgebase_id].build_index()
-    resp = flask.Response("Index composed", 200)
-    return resp
+    print("4")
+    return build_compose_success_message()
 
 
 @app.route('/query', methods=['GET'])
