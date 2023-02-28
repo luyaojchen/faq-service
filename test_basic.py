@@ -37,23 +37,23 @@ def test_flow(client: FlaskClient):
         input_file_stream = io.BytesIO(input_file.read())
     data = {
         'knowledgebase_id': knowledgebase_id,
-        'file': (input_file_stream, file_name),
-        'file_name': file_name
+        'files': (input_file_stream, file_name),
     }
 
     resp = client.post('/doc/add', content_type='multipart/form-data', data=data)
-    print(resp.data)
-    # data = json.loads(resp.data.decode('utf-8'))
-    print('resp for doc ', data)
+    assert resp.status_code == 200
 
-    # resp = client.get('/compose', json={'knowledgebase_id': knowledgebase_id})
-    # data = json.loads(resp.data.decode('utf-8'))
-    # print(data)
-    # test_payload = {
-    #     'knowledgebase_id': knowledgebase_id,
-    #     'query': 'what is this document about?'
-    # }
-    #
+    data = {
+        'knowledgebase_id': knowledgebase_id
+    }
+
+    resp = client.get('/compose?knowledgebase_id='+knowledgebase_id)
+    data = json.loads(resp.data.decode('utf-8'))
+    print(data)
+    test_payload = {
+        'knowledgebase_id': knowledgebase_id,
+        'query': 'what is this document about?'
+    }
     # resp = client.get('/query', json=test_payload)
     # data = json.loads(resp.data.decode('utf-8'))
     # print(data)
