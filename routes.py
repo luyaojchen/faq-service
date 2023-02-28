@@ -46,8 +46,7 @@ class Knowledgebase:
         )
         self.index = index
 
-        # Mock a GPTSimpleVectorIndex
-        return GPTSimpleVectorIndex(documents=[])
+        return self.index
 
     # String repr is just the id
     def __repr__(self):
@@ -57,13 +56,10 @@ class Knowledgebase:
     def __eq__(self, other):
         return self.knowledgebase_id == other.knowledgebase_id
 
-
-
 class Answer:
     def __init__(self, answer_id, answer_text):
         self.answer_id = answer_id
         self.answer_text = answer_text
-
 
 def build_api_error(error_message):
     return flask.jsonify({"error": error_message})
