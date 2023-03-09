@@ -1,3 +1,6 @@
+import asyncio
+from functools import partial
+
 from llama_index import GPTSimpleVectorIndex
 from models.statics_model import llm_predictor
 from models.statics_model import prompt_helper
@@ -13,7 +16,7 @@ class Knowledgebase:
         for document in documents:
             self.documents.append(document)
 
-    def build_index(self):
+    async def build_index(self):
         #Go through the documents and flatten them
         flattened_documents = []
         for document in self.documents:
@@ -23,9 +26,8 @@ class Knowledgebase:
             else:
                 flattened_documents.append(document)
 
-        index = GPTSimpleVectorIndex(
-            documents=flattened_documents, llm_predictor=llm_predictor, prompt_helper=prompt_helper
-        )
+        index = await asyncio.get_event_loop().run_in_executor(None, partial(GPTSimpleVectorIndex, documents=flattened_documents, llm_predictor=llm_predictor, prompt_helper=prompt_helper))
+
         self.index = index
 
         return self.index

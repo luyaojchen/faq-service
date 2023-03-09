@@ -1,9 +1,15 @@
+import asyncio
+from functools import partial
+
 import flask
+from llama_index.prompts.chat_prompts import CHAT_REFINE_PROMPT
 
 from models.statics_model import g_index, ResponseStatics
+from models.statics_model import llm_predictor
+from models.statics_model import prompt_helper
 
 
-def query_handler(knowledgebase_id, query):
+async def query_handler(knowledgebase_id, query):
 
     # Validate the knowledgebase ID
     if not knowledgebase_id:
@@ -22,7 +28,7 @@ def query_handler(knowledgebase_id, query):
         return ResponseStatics.build_api_error("No query provided")
 
     # Query the index
-    resp = g_index[knowledgebase_id].index.query(query)
+    resp = await g_index[knowledgebase_id].index.aquery(query, llm_predictor=llm_predictor, refine_template=CHAT_REFINE_PROMPT, similarity_top_k=3, prompt_helper=prompt_helper)
 
     resp = flask.Response(resp.response, 200)
 

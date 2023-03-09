@@ -1,7 +1,7 @@
 from models.statics_model import g_index
 
 
-def compose_handler(knowledgebase_id):
+async def compose_handler(knowledgebase_id):
 
     if not knowledgebase_id:
         return False
@@ -10,5 +10,5 @@ def compose_handler(knowledgebase_id):
     if knowledgebase_id not in g_index:
         return False
 
-    g_index[knowledgebase_id].build_index()
+    await g_index[knowledgebase_id].build_index()
     return True
