@@ -1,5 +1,5 @@
 import tempfile
-from gpt_index import SimpleDirectoryReader
+from llama_index import SimpleDirectoryReader
 
 from models.statics_model import ResponseStatics, g_index
 

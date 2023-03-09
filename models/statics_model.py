@@ -1,6 +1,6 @@
 import flask
 import openai
-from gpt_index import LLMPredictor, GPTSimpleVectorIndex, SimpleDirectoryReader, PromptHelper, Document
+from llama_index import LLMPredictor, GPTSimpleVectorIndex, SimpleDirectoryReader, PromptHelper, Document
 from langchain import OpenAI
 
 from services.environment_service import EnvService

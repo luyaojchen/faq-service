@@ -1,4 +1,4 @@
-from gpt_index import GPTSimpleVectorIndex
+from llama_index import GPTSimpleVectorIndex
 from models.statics_model import llm_predictor
 from models.statics_model import prompt_helper
 class Knowledgebase:
@@ -12,6 +12,7 @@ class Knowledgebase:
     def add_documents(self, *documents):
         for document in documents:
             self.documents.append(document)
+
     def build_index(self):
         #Go through the documents and flatten them
         flattened_documents = []
