@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import flask
 import openai
 from langchain.llms import OpenAIChat
@@ -13,10 +15,26 @@ prompt_helper = PromptHelper(3900, 256, 20)
 # for now keep in memory of all documents in list
 g_index = {}
 
+
+file_extensions_mappings = {
+    "application/pdf": ".pdf",
+    "application/msword": ".docx",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ".docx",
+    "application/vnd.oasis.opendocument.text": ".odt",
+    "text/plain": ".txt",
+    "text/csv": ".csv",
+    "text/markdown": ".md",
+    "text/html": ".html",
+    # Epub
+    "application/epub+zip": ".epub",
+}
+
 class Answer:
     def __init__(self, answer_id, answer_text):
         self.answer_id = answer_id
         self.answer_text = answer_text
+
+
 class ResponseStatics:
 
     @staticmethod
@@ -38,3 +56,7 @@ class ResponseStatics:
     @staticmethod
     def build_creation_response(knowledgebase_id):
         return flask.jsonify({"knowledgebase_id": knowledgebase_id})
+
+    @staticmethod
+    def build_list_response(knowledgebase_ids):
+        return flask.jsonify({"knowledgebase_ids": knowledgebase_ids})

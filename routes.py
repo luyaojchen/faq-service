@@ -9,6 +9,7 @@ from langchain import OpenAI
 from handlers.compose import compose_handler
 from handlers.create import create_handler
 from handlers.query import query_handler
+from handlers.list import list_handler
 
 from handlers.upload import upload_doc_handler, upload_link_handler
 from models.knowledgebase_model import Knowledgebase
@@ -70,6 +71,11 @@ async def query():
     knowledgebase_id = flask.request.args.get('knowledgebase_id')
 
     return await query_handler(knowledgebase_id, query)
+
+
+@app.route('/index/list', methods=['GET'])
+async def list_index():
+    return await list_handler()
 
 
 def init():
