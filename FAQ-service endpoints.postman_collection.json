@@ -1,0 +1,269 @@
+{
+	"info": {
+		"_postman_id": "274b172f-a13e-4741-b1dc-03fd08672429",
+		"name": "FAQ-service endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Ask",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "knowledgebase_id",
+							"value": "0bc016f6-36e2-4be7-9588-3ea4d46f6270",
+							"type": "default",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": "",
+							"type": "default",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8182/query?knowledgebase_id=a3f009c8-0159-467a-bbca-067cbe76907b&query=what is this document about?",
+					"host": [
+						"localhost"
+					],
+					"port": "8182",
+					"path": [
+						"query"
+					],
+					"query": [
+						{
+							"key": "knowledgebase_id",
+							"value": "a3f009c8-0159-467a-bbca-067cbe76907b"
+						},
+						{
+							"key": "query",
+							"value": "what is this document about?"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Compose",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:8182/compose?knowledgebase_id=a3f009c8-0159-467a-bbca-067cbe76907b",
+					"host": [
+						"localhost"
+					],
+					"port": "8182",
+					"path": [
+						"compose"
+					],
+					"query": [
+						{
+							"key": "knowledgebase_id",
+							"value": "a3f009c8-0159-467a-bbca-067cbe76907b"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8182/create",
+					"host": [
+						"localhost"
+					],
+					"port": "8182",
+					"path": [
+						"create"
+					],
+					"query": [
+						{
+							"key": null,
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload document",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/Users/luyaochen/PycharmProjects/faq-service/testing.txt"
+						},
+						{
+							"key": "knowledgebase_id",
+							"value": "e74c5502-00e3-4ded-8e31-7aa8d03c0572",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8182/index/doc/add",
+					"host": [
+						"localhost"
+					],
+					"port": "8182",
+					"path": [
+						"index",
+						"doc",
+						"add"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload link (website)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "files",
+							"type": "file",
+							"src": [],
+							"disabled": true
+						},
+						{
+							"key": "knowledgebase_id",
+							"value": "d41dc7c4-b4b7-47cd-9bb0-1a44c54113ba",
+							"type": "default"
+						},
+						{
+							"key": "url",
+							"value": "https://kaveenk.com/",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8182/index/link/add",
+					"host": [
+						"localhost"
+					],
+					"port": "8182",
+					"path": [
+						"index",
+						"link",
+						"add"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload link (website -> pdf)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "files",
+							"type": "file",
+							"src": [],
+							"disabled": true
+						},
+						{
+							"key": "knowledgebase_id",
+							"value": "a3f009c8-0159-467a-bbca-067cbe76907b",
+							"type": "default"
+						},
+						{
+							"key": "url",
+							"value": "https://trentstauffer.ca/resume.pdf",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8182/index/link/add",
+					"host": [
+						"localhost"
+					],
+					"port": "8182",
+					"path": [
+						"index",
+						"link",
+						"add"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Adjust",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8182/adjust",
+					"host": [
+						"localhost"
+					],
+					"port": "8182",
+					"path": [
+						"adjust"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
