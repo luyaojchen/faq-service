@@ -40,7 +40,7 @@ def test_flow(client: FlaskClient):
         'file': (input_file_stream, file_name),
     }
 
-    resp = client.post('/doc/add', content_type='multipart/form-data', data=data)
+    resp = client.post('/index/doc/add', content_type='multipart/form-data', data=data)
     assert resp.status_code == 200
 
     data = {

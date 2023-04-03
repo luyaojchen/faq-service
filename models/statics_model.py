@@ -2,15 +2,14 @@ from pathlib import Path
 
 import flask
 import openai
-from langchain.llms import OpenAIChat
+from langchain.chat_models import ChatOpenAI
 from llama_index import LLMPredictor, GPTSimpleVectorIndex, SimpleDirectoryReader, PromptHelper, Document
-from langchain import OpenAI
-
 from services.environment_service import EnvService
 
 openai.openai_api_key = EnvService.get_openai_api_key()
+openai.openai_organization = EnvService.get_openai_organization()
 
-llm_predictor = LLMPredictor(llm=OpenAIChat(temperature=0, model_name="gpt-3.5-turbo"))
+llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo"))
 prompt_helper = PromptHelper(3900, 256, 20)
 # for now keep in memory of all documents in list
 g_index = {}

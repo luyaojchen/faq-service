@@ -14,5 +14,12 @@ class EnvService:
         except:
             raise PermissionError('Could not get OPENAI_API_KEY from environment')
 
+    @staticmethod
+    def get_openai_organization():
+        try:
+            return os.getenv('OPENAI_ORGANIZATION')
+        except:
+            raise PermissionError('Could not get OPENAI_ORGANIZATION from environment')
+
 
 openai.openai_api_key = EnvService.get_openai_api_key()
