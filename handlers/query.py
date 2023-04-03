@@ -5,12 +5,11 @@ import flask
 from llama_index import ServiceContext
 from llama_index.prompts.chat_prompts import CHAT_REFINE_PROMPT
 
-from models.statics_model import g_index, ResponseStatics
-from models.statics_model import llm_predictor
+from models.statics_model import g_index, ResponseStatics, Models
 from models.statics_model import prompt_helper
 
 
-async def query_handler(knowledgebase_id, query):
+async def query_handler(knowledgebase_id, query, nodes=3, model="gpt-3.5-turbo"):
 
     # Validate the knowledgebase ID
     if not knowledgebase_id:
@@ -28,10 +27,10 @@ async def query_handler(knowledgebase_id, query):
     if not query:
         return ResponseStatics.build_api_error("No query provided")
 
-    service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor, prompt_helper=prompt_helper)
+    service_context = ServiceContext.from_defaults(llm_predictor=Models.get_llm_predictor(model) if model else Models.get_llm_predictor("gpt-3.5-turbo"), prompt_helper=prompt_helper)
 
     # Query the index
-    resp = await g_index[knowledgebase_id].index.aquery(query,  refine_template=CHAT_REFINE_PROMPT, similarity_top_k=3, service_context=service_context)
+    resp = await g_index[knowledgebase_id].index.aquery(query,  refine_template=CHAT_REFINE_PROMPT, similarity_top_k=nodes, service_context=service_context)
 
     resp = flask.Response(resp.response, 200)
 

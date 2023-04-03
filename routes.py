@@ -13,7 +13,7 @@ from handlers.list import list_handler
 
 from handlers.upload import upload_doc_handler, upload_link_handler
 from models.knowledgebase_model import Knowledgebase
-from models.statics_model import ResponseStatics, g_index
+from models.statics_model import ResponseStatics, g_index, Models
 
 app = Flask(__name__)
 load_dotenv()
@@ -67,10 +67,22 @@ async def query():
     # Extract the query from the request (GET)
     query = flask.request.args.get('query')
 
+    nodes = int(flask.request.args.get('nodes')) if flask.request.args.get('nodes') else 3
+
+    # Assert that the number of nodes is valid
+    if nodes < 1 or nodes > 10:
+        return ResponseStatics.build_api_error("Invalid number of nodes provided [1,10] is valid")
+
+    model = flask.request.args.get('model')
+
+    # Assert that the model is valid and in the list of models
+    if model and model not in Models.get_models():
+        return ResponseStatics.build_api_error("Invalid model provided")
+
     # Extract the knowledgebase_id from the request
     knowledgebase_id = flask.request.args.get('knowledgebase_id')
 
-    return await query_handler(knowledgebase_id, query)
+    return await query_handler(knowledgebase_id, query, nodes, model)
 
 
 @app.route('/index/list', methods=['GET'])

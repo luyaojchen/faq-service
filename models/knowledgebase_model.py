@@ -3,7 +3,7 @@ from functools import partial
 from pathlib import Path
 
 from llama_index import GPTSimpleVectorIndex, ServiceContext
-from models.statics_model import llm_predictor, g_index
+from models.statics_model import LLMPredictorFAQ, g_index
 from models.statics_model import prompt_helper
 
 
@@ -28,7 +28,7 @@ class Knowledgebase:
                 flattened_documents.extend(document)
             else:
                 flattened_documents.append(document)
-        service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor, chunk_size_limit=512, prompt_helper=prompt_helper)
+        service_context = ServiceContext.from_defaults(llm_predictor=LLMPredictorFAQ.GPT3.value, chunk_size_limit=512, prompt_helper=prompt_helper)
         index = await asyncio.get_event_loop().run_in_executor(None, partial(GPTSimpleVectorIndex.from_documents, documents=flattened_documents, service_context=service_context))
 
         self.index = index

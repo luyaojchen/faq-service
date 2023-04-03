@@ -1,3 +1,4 @@
+from enum import Enum
 from pathlib import Path
 
 import flask
@@ -9,7 +10,6 @@ from services.environment_service import EnvService
 openai.openai_api_key = EnvService.get_openai_api_key()
 openai.openai_organization = EnvService.get_openai_organization()
 
-llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo"))
 prompt_helper = PromptHelper(3900, 256, 20)
 # for now keep in memory of all documents in list
 g_index = {}
@@ -27,6 +27,31 @@ file_extensions_mappings = {
     # Epub
     "application/epub+zip": ".epub",
 }
+
+class LLMPredictorFAQ(Enum):
+    GPT3 = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo"))
+    GPT4 = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-4"))
+
+class Models(Enum):
+    GPT3 = "gpt-3.5-turbo"
+    GPT4 = "gpt-4"
+
+    # Map these models to the LLMPredictor ones
+    @staticmethod
+    def get_llm_predictor(model: str):
+        if model == Models.GPT3.value:
+            return LLMPredictorFAQ.GPT3.value
+        elif model == Models.GPT4.value:
+            return LLMPredictorFAQ.GPT4.value
+        else:
+            raise ValueError("Invalid model")
+
+    def __str__(self):
+        return self.value
+
+    @staticmethod
+    def get_models():
+        return [model.value for model in Models]
 
 class Answer:
     def __init__(self, answer_id, answer_text):
