@@ -26,7 +26,7 @@ def client():
     return app.test_client()
 
 
-def test_flow(client: FlaskClient):
+def test_doc_add(client: FlaskClient):
     resp = client.get('/create')
     data = json.loads(resp.data.decode('utf-8'))
     knowledgebase_id = data['knowledgebase_id']
@@ -58,3 +58,65 @@ def test_flow(client: FlaskClient):
     resp = client.get('/query', query_string=test_payload)
     data = resp.data.decode('utf-8')
     assert "test" in data
+
+
+def test_link(client: FlaskClient):
+    resp = client.get('/create')
+    data = json.loads(resp.data.decode('utf-8'))
+    knowledgebase_id = data['knowledgebase_id']
+
+    url = 'https://kaveenk.com/'
+    data = {
+        'knowledgebase_id': knowledgebase_id,
+        'url': url,
+    }
+
+    resp = client.post('/index/link/add', data=data)
+    assert resp.status_code == 200
+
+    data = {
+        'knowledgebase_id': knowledgebase_id
+    }
+
+    resp = client.get('/compose', query_string=data)
+
+    assert resp.status_code == 200
+
+    test_payload = {
+        'knowledgebase_id': knowledgebase_id,
+        'query': 'Who is this document about?'
+    }
+    resp = client.get('/query', query_string=test_payload)
+    data = resp.data.decode('utf-8')
+    assert "Kaveen" in data
+
+
+def test_link_pdf(client: FlaskClient):
+    resp = client.get('/create')
+    data = json.loads(resp.data.decode('utf-8'))
+    knowledgebase_id = data['knowledgebase_id']
+
+    url = 'https://trentstauffer.ca/resume.pdf'
+    data = {
+        'knowledgebase_id': knowledgebase_id,
+        'url': url,
+    }
+
+    resp = client.post('/index/link/add', data=data)
+    assert resp.status_code == 200
+
+    data = {
+        'knowledgebase_id': knowledgebase_id
+    }
+
+    resp = client.get('/compose', query_string=data)
+
+    assert resp.status_code == 200
+
+    test_payload = {
+        'knowledgebase_id': knowledgebase_id,
+        'query': 'Who is this document about?'
+    }
+    resp = client.get('/query', query_string=test_payload)
+    data = resp.data.decode('utf-8')
+    assert "Trent" in data
