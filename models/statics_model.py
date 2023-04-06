@@ -4,11 +4,13 @@ from pathlib import Path
 import flask
 import openai
 from langchain.chat_models import ChatOpenAI
-from llama_index import LLMPredictor, GPTSimpleVectorIndex, SimpleDirectoryReader, PromptHelper, Document
+from llama_index import LLMPredictor, GPTSimpleVectorIndex, SimpleDirectoryReader, PromptHelper, Document, \
+    OpenAIEmbedding
 from services.environment_service import EnvService
 
 openai.openai_api_key = EnvService.get_openai_api_key()
 openai.openai_organization = EnvService.get_openai_organization()
+openai.organization = EnvService.get_openai_organization()
 
 prompt_helper = PromptHelper(3900, 256, 20)
 # for now keep in memory of all documents in list
@@ -32,6 +34,13 @@ class LLMPredictorFAQ(Enum):
     GPT3 = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo"))
     GPT4 = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-4"))
 
+class EmbedModelFAQ(Enum):
+    ADA = OpenAIEmbedding()
+
+    @staticmethod
+    def get_last_token_usage():
+        return EmbedModelFAQ.ADA.value.last_token_usage
+
 class Models(Enum):
     GPT3 = "gpt-3.5-turbo"
     GPT4 = "gpt-4"
@@ -45,6 +54,10 @@ class Models(Enum):
             return LLMPredictorFAQ.GPT4.value
         else:
             raise ValueError("Invalid model")
+
+    @staticmethod
+    def get_last_token_usage(model: str):
+        return Models.get_llm_predictor(model).last_token_usage
 
     def __str__(self):
         return self.value
@@ -66,8 +79,8 @@ class ResponseStatics:
         return flask.jsonify({"error": error_message})
 
     @staticmethod
-    def build_compose_success_message():
-        return flask.jsonify({"message": "Successfully composed knowledgebase"})
+    def build_compose_success_message(tokens):
+        return flask.jsonify({"message": "Successfully composed knowledgebase", "tokens_used": tokens})
 
     @staticmethod
     def build_upload_success_message():

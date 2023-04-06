@@ -56,10 +56,11 @@ async def compose():
     knowledgebase_id = flask.request.args.get('knowledgebase_id')
 
     # Validate the knowledgebase ID
-    if not await compose_handler(knowledgebase_id):
+    tokens = await compose_handler(knowledgebase_id)
+    if not tokens:
         return ResponseStatics.build_api_error("Invalid knowledgebase ID or none provided")
 
-    return ResponseStatics.build_compose_success_message()
+    return ResponseStatics.build_compose_success_message(tokens)
 
 
 @app.route('/query', methods=['GET'])

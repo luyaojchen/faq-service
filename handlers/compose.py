@@ -10,5 +10,5 @@ async def compose_handler(knowledgebase_id):
     if knowledgebase_id not in g_index:
         return False
 
-    await g_index[knowledgebase_id].build_index()
-    return True
+    tokens = await g_index[knowledgebase_id].build_index()
+    return tokens
