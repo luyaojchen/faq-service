@@ -33,5 +33,6 @@ async def query_handler(knowledgebase_id, query, nodes=3, model="gpt-3.5-turbo")
     resp = await g_index[knowledgebase_id].index.aquery(query,  refine_template=CHAT_REFINE_PROMPT, similarity_top_k=nodes, service_context=service_context)
 
     resp = flask.Response(resp.response, 200)
+    resp.headers.add('Access-Control-Allow-Origin', '*')
 
     return resp

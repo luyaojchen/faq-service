@@ -7,21 +7,22 @@ function App() {
   const [file, setFile] = useState();
   const [query, setQuery] = useState();
   const [submittedValue, setSubmittedValue] = useState();
-  const [knowledgeBase, setKnowledgeBase] = useState();
+  const [knowledgebase, setKnowledgebase] = useState();
 
   const strUrl = "http://127.0.0.1:8182";
-
   // uploading file to endpoint
+
   const AddDoc = async (file) => {
     var kb = "";
     var data = new FormData();
     await fetch(strUrl + "/create", {
       method: "GET",
-      mode: "no-cors",
     })
-      .then((response) => response.json())
+      .then((response) => {
+        return response.json();
+      })
       .then((data) => {
-        setKnowledgeBase(data.knowledgebase_id);
+        console.log(data);
         kb = data.knowledgebase_id;
       })
       .catch((err) => {
@@ -52,6 +53,28 @@ function App() {
       .catch((err) => {
         console.log(err.message);
       });
+    return kb;
+  };
+
+  const AskQuestion = async () => {
+    var text = "";
+    await fetch(
+      strUrl + "/query?knowledgebase_id=" + knowledgebase + "&query=" + query,
+      {
+        method: "GET",
+      }
+    )
+      .then((response) => {
+        return response.text();
+      })
+      .then((data) => {
+        console.log(data);
+        text = data;
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+    return text;
   };
 
   // handler for selecting file
@@ -61,7 +84,8 @@ function App() {
 
   // handler for submitting button
   const submitFile = async () => {
-    await AddDoc(file);
+    const kb = await AddDoc(file);
+    setKnowledgebase(kb);
     setSubmittedValue(file);
   };
 
@@ -72,10 +96,11 @@ function App() {
   };
 
   // handler for submitting question
-  const submitQuestion = () => {
+  const submitQuestion = async () => {
     var message = document.getElementById("query").value;
     setQuery(message);
-    console.log(query);
+    const text = await AskQuestion();
+    document.getElementById("ans").value = text;
   };
 
   return (
@@ -105,7 +130,7 @@ function App() {
             <br />
             <Button as="input" type="submit" onClick={submitQuestion} />
             <br />
-            <textarea readOnly placeholder="Answer"></textarea>
+            <textarea id="ans" readOnly placeholder="Answer"></textarea>
           </Row>
         )}
       </Row>

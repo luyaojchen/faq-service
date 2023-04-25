@@ -76,24 +76,37 @@ class ResponseStatics:
 
     @staticmethod
     def build_api_error(error_message):
-        return flask.jsonify({"error": error_message})
+        response = flask.jsonify({"error": error_message})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
     @staticmethod
     def build_compose_success_message(tokens):
-        return flask.jsonify({"message": "Successfully composed knowledgebase", "tokens_used": tokens})
+        response = flask.jsonify({"message": "Successfully composed knowledgebase", "tokens_used": tokens})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
     @staticmethod
     def build_upload_success_message():
-        return flask.jsonify({"message": "Successfully uploaded document"})
+        response = flask.jsonify({"message": "Successfully uploaded document"})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
     @staticmethod
     def build_answer_response(answer: Answer):
-        return flask.jsonify({"answer_id": answer.answer_id, "answer_text": answer.answer_text})
+        response = flask.jsonify({"answer_id": answer.answer_id, "answer_text": answer.answer_text})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
     @staticmethod
     def build_creation_response(knowledgebase_id):
-        return flask.jsonify({"knowledgebase_id": knowledgebase_id})
+        response = flask.jsonify({"knowledgebase_id": knowledgebase_id})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
     @staticmethod
     def build_list_response(knowledgebase_ids):
-        return flask.jsonify({"knowledgebase_ids": knowledgebase_ids})
+        response = flask.jsonify({"knowledgebase_ids": knowledgebase_ids})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
+
