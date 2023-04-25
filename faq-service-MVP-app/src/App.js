@@ -10,7 +10,6 @@ function App() {
   const [knowledgebase, setKnowledgebase] = useState();
 
   const strUrl = "http://127.0.0.1:8182";
-  // uploading file to endpoint
 
   const AddDoc = async (file) => {
     var kb = "";
