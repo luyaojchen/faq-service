@@ -130,6 +130,13 @@ function App() {
             <Button as="input" type="submit" onClick={submitQuestion} />
             <br />
             <textarea id="ans" readOnly placeholder="Answer"></textarea>
+            <button
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              restart
+            </button>
           </Row>
         )}
       </Row>
